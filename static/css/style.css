@@ -1,0 +1,413 @@
+/* PizZap - identidade visual do projeto (cores e fonte do material da equipe) */
+:root {
+  --bg: #f5f2ec;
+  --surface: #ffffff;
+  --surface-2: #faf8f4;
+  --ink: #26201c;
+  --ink-2: #5c5148;
+  --ink-3: #8a7d72;
+  --linha: #e7e0d4;
+  --orange: #ff751f;
+  --orange-escuro: #d9570a;
+  --red: #ff3131;
+  --red-texto: #c41616;
+  --yellow: #ffde59;
+  --verde: #1f8a4c;
+  --raio: 12px;
+  --sombra: 0 2px 6px rgba(38, 32, 28, .08);
+  --sombra-forte: 0 8px 22px rgba(38, 32, 28, .12);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: clamp(1.75rem, 1.2rem + 2.6vw, 2.75rem); font-weight: 900; letter-spacing: -.01em; }
+h2 { font-size: clamp(1.25rem, 1.1rem + .8vw, 1.6rem); font-weight: 900; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+p { margin: 0 0 1em; }
+a { color: var(--orange-escuro); }
+abbr { text-decoration: none; cursor: help; }
+
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; border-radius: 4px; }
+
+.pular {
+  position: absolute; left: -9999px; top: 8px;
+  background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 8px; z-index: 10;
+}
+.pular:focus { left: 16px; }
+
+/* ------------------------------------------------------------------ topo */
+.topo { background: var(--ink); border-bottom: 4px solid var(--red); }
+.topo-interno {
+  max-width: 1120px; margin: 0 auto; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.marca {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: #fff; text-decoration: none; font-weight: 900; font-size: 1.45rem; letter-spacing: .04em;
+}
+.marca b { color: var(--yellow); font-weight: 900; }
+.marca-icone { width: 30px; height: 30px; }
+.menu { display: flex; align-items: center; gap: 6px; }
+.menu a {
+  color: #f0e8dc; text-decoration: none; font-weight: 500; font-size: .95rem;
+  padding: 8px 12px; border-radius: 999px;
+}
+.menu a:hover { background: rgba(255, 255, 255, .08); }
+.menu a[aria-current="page"] { color: var(--yellow); }
+.menu .menu-cta { background: var(--orange); color: #fff; font-weight: 700; }
+.menu .menu-cta:hover { background: var(--orange-escuro); }
+.menu .menu-cta[aria-current="page"] { color: #fff; }
+
+.pagina { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 32px 16px 56px; }
+
+.rodape {
+  border-top: 1px solid var(--linha);
+  padding: 20px 16px 28px; text-align: center; color: var(--ink-3); font-size: .82rem;
+}
+.rodape p { margin: 2px 0; }
+
+/* ---------------------------------------------------------------- botões */
+.botao {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 46px; padding: 10px 22px; border-radius: 999px; border: 2px solid transparent;
+  font: inherit; font-weight: 700; font-size: 1rem; text-decoration: none; cursor: pointer;
+  transition: background-color .15s, border-color .15s, transform .1s;
+}
+.botao:active { transform: translateY(1px); }
+.botao-principal { background: var(--orange); color: #fff; }
+.botao-principal:hover { background: var(--orange-escuro); }
+.botao-secundario { background: var(--surface); color: var(--ink); border-color: var(--ink); }
+.botao-secundario:hover { background: var(--yellow); }
+.botao-texto { background: none; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; padding-inline: 10px; }
+.botao-texto:hover { color: var(--orange-escuro); }
+
+.sobretitulo {
+  margin: 0 0 8px; color: var(--orange-escuro); font-weight: 700;
+  font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ home */
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 40px; align-items: center; padding: 16px 0 48px;
+}
+.hero-lead { font-size: 1.12rem; color: var(--ink-2); max-width: 36em; }
+.hero-acoes { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-top: 24px; }
+
+.hero-exemplo {
+  background: var(--surface); border-radius: var(--raio); box-shadow: var(--sombra-forte);
+  border-top: 6px solid var(--orange); padding: 20px 22px 12px;
+  transform: rotate(1.2deg);
+}
+.exemplo-rotulo { font-size: .8rem; color: var(--ink-3); font-weight: 500; margin-bottom: 10px; }
+.exemplo-lista { list-style: none; margin: 0; padding: 0; }
+.exemplo-lista li {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 12px;
+  padding: 10px 0; border-top: 1px dashed var(--linha);
+}
+.exemplo-lista li:first-child { border-top: 0; }
+.exemplo-lista b { text-align: right; font-weight: 900; }
+.exemplo-lista small { grid-column: 2; text-align: right; color: var(--ink-3); font-size: .82rem; }
+
+.secao { padding: 40px 0; border-top: 1px solid var(--linha); }
+.passos {
+  list-style: none; margin: 16px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
+}
+.passos li { background: var(--surface); border-radius: var(--raio); padding: 22px; box-shadow: var(--sombra); }
+.passos p { color: var(--ink-2); margin: 0; }
+.passo-num {
+  display: inline-grid; place-items: center; width: 36px; height: 36px; margin-bottom: 12px;
+  border-radius: 50%; background: var(--yellow); font-weight: 900;
+}
+.secao-faixa {
+  background: var(--ink); color: #f0e8dc; border: 0; border-radius: var(--raio);
+  padding: 32px 28px; margin-top: 8px;
+}
+.secao-faixa h2 { color: #fff; }
+.beneficios { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 10px; }
+.beneficios b { color: var(--yellow); }
+
+/* ------------------------------------------------------------ formulário */
+.cabecalho-pagina { max-width: 46em; margin-bottom: 24px; }
+.cabecalho-pagina p:last-child { color: var(--ink-2); }
+
+.alerta-erro {
+  background: #fff1f0; border: 2px solid var(--red); border-radius: var(--raio);
+  padding: 16px 20px; margin-bottom: 24px;
+}
+.alerta-erro h2 { font-size: 1.05rem; color: var(--red-texto); margin-bottom: 6px; }
+.alerta-erro ul { margin: 0; padding-left: 20px; }
+
+.bloco { margin-bottom: 28px; }
+.bloco-titulo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+.bloco-num {
+  display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--ink); color: var(--yellow); font-size: .95rem;
+}
+
+.lista-pizzas { display: grid; gap: 16px; margin-bottom: 16px; }
+
+.cartao-pizza {
+  margin: 0; min-width: 0; border: 1px solid var(--linha); border-left: 5px solid var(--orange);
+  border-radius: var(--raio); background: var(--surface); padding: 16px 20px 20px; box-shadow: var(--sombra);
+}
+.cartao-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.cartao-pizza legend { padding: 0; float: left; }
+.pizza-num { font-weight: 900; font-size: 1.05rem; }
+.botao-remover {
+  background: none; border: 0; color: var(--red-texto); font: inherit; font-size: .9rem;
+  font-weight: 500; cursor: pointer; padding: 6px 4px; text-decoration: underline; text-underline-offset: 3px;
+}
+.lista-pizzas[data-unica] .botao-remover { display: none; }
+
+.grade-campos {
+  clear: both; display: grid; grid-template-columns: 120px minmax(0, 1fr) minmax(0, 1fr); gap: 14px;
+}
+.campo { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.campo label, .rotulo { font-weight: 700; font-size: .92rem; margin: 0; }
+.rotulo small { font-weight: 400; color: var(--ink-3); }
+
+input[type="number"], select {
+  width: 100%; min-height: 46px; padding: 10px 12px; font: inherit; color: var(--ink);
+  background: var(--surface-2); border: 2px solid var(--linha); border-radius: 10px;
+}
+select {
+  appearance: none; padding-right: 36px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px; background-repeat: no-repeat;
+}
+input[type="number"]:focus, select:focus { border-color: var(--orange); outline: none; background-color: #fff; }
+
+.campo-sabores { margin-top: 16px; }
+.grupo-sabores { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.grupo-nome { font-size: .78rem; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { position: relative; cursor: pointer; }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.chip span {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 8px 14px;
+  border: 2px solid var(--linha); border-radius: 999px; background: var(--surface-2);
+  font-size: .92rem; font-weight: 500; transition: background-color .12s, border-color .12s;
+}
+.chip:hover span { border-color: var(--ink-3); }
+.chip input:checked + span { background: var(--yellow); border-color: var(--ink); font-weight: 700; }
+.chip input:checked + span::before { content: "✓"; margin-right: 6px; }
+.chip input:focus-visible + span { outline: 3px solid var(--orange); outline-offset: 2px; }
+.chip input:disabled + span { opacity: .45; cursor: not-allowed; }
+
+.opcoes-unidade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.opcao-unidade { position: relative; cursor: pointer; }
+.opcao-unidade input { position: absolute; opacity: 0; }
+.opcao-unidade span {
+  display: flex; align-items: center; height: 100%; min-height: 56px; padding: 12px 14px;
+  background: var(--surface); border: 2px solid var(--linha); border-radius: 10px; font-weight: 500; font-size: .95rem;
+}
+.opcao-unidade input:checked + span { border-color: var(--orange); background: #fff6ef; font-weight: 700; box-shadow: inset 0 0 0 1px var(--orange); }
+.opcao-unidade input:focus-visible + span { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+/* validação: vermelho = corrigir, verde = ok */
+.msg-erro { color: var(--red-texto); font-size: .88rem; font-weight: 500; margin: 2px 0 0; }
+.msg-erro::before { content: "⚠ "; }
+.campo-invalido input[type="number"], .campo-invalido select { border-color: var(--red); background: #fff7f6; }
+.campo-invalido .chip span, .opcoes-unidade.campo-invalido .opcao-unidade span { border-color: #ffb3ad; }
+.campo-ok input[type="number"], .campo-ok select { border-color: var(--verde); }
+
+.barra-envio {
+  position: sticky; bottom: 0; z-index: 2;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin: 0 -16px; padding: 12px 16px; background: rgba(245, 242, 236, .96);
+  border-top: 1px solid var(--linha); backdrop-filter: blur(4px);
+}
+.total-pizzas { margin: 0; color: var(--ink-2); }
+.total-pizzas b { color: var(--ink); font-size: 1.15rem; }
+
+/* --------------------------------------------------------------- receita */
+.cabecalho-receita {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  padding-bottom: 20px; margin-bottom: 28px; border-bottom: 2px solid var(--yellow);
+}
+.cabecalho-receita h1 { margin-bottom: 6px; }
+.meta { color: var(--ink-2); margin: 0; }
+.aviso-reconstruida { margin: .5rem 0 0; font-size: .9rem; color: var(--ink-2); border-left: 3px solid var(--ink-2); padding-left: .6rem; }
+.acoes-receita { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.titulo-secao { font-size: 1.3rem; }
+.secao-receita { margin-bottom: 32px; min-width: 0; }
+
+.grade-pizzas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 18px; }
+.cartao-resultado {
+  background: var(--surface); border-radius: var(--raio); border-top: 6px solid var(--orange);
+  box-shadow: var(--sombra); padding: 18px 20px 8px; min-width: 0;
+}
+.resultado-topo { margin-bottom: 8px; }
+.resultado-topo h3 { font-size: 1.25rem; font-weight: 900; margin-bottom: 4px; }
+.resultado-topo h3 span { font-weight: 400; color: var(--ink-3); font-size: 1rem; }
+.resultado-topo p { margin: 0 0 4px; color: var(--ink-2); }
+.selo {
+  display: inline-block; background: var(--yellow); color: var(--ink); font-size: .75rem; font-weight: 700;
+  padding: 1px 8px; border-radius: 999px; vertical-align: 1px;
+}
+.bolinha { font-size: .92rem; }
+
+.tabela-ingredientes { width: 100%; border-collapse: collapse; table-layout: fixed; margin: 12px 0 14px; font-size: .94rem; }
+.tabela-ingredientes caption {
+  text-align: left; font-weight: 900; font-size: .78rem; color: var(--orange-escuro);
+  text-transform: uppercase; letter-spacing: .12em; padding-bottom: 6px;
+}
+.tabela-ingredientes th, .tabela-ingredientes td {
+  text-align: left; vertical-align: top; padding: 8px 6px; border-bottom: 1px solid var(--linha);
+  overflow-wrap: anywhere;
+}
+.tabela-ingredientes thead th { font-size: .78rem; color: var(--ink-3); font-weight: 700; border-bottom-width: 2px; }
+.tabela-ingredientes tbody th { font-weight: 500; width: 42%; }
+.tabela-ingredientes tbody tr:last-child > * { border-bottom: 0; }
+.qtd-principal { display: block; font-weight: 700; font-variant-numeric: tabular-nums; }
+.qtd-secundaria { display: block; color: var(--ink-3); font-size: .85rem; line-height: 1.35; }
+
+.grade-final { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 28px; }
+.lista-compras { list-style: none; margin: 0; padding: 0; background: var(--surface); border-radius: var(--raio); box-shadow: var(--sombra); }
+.lista-compras li {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  padding: 10px 16px; border-bottom: 1px solid var(--linha);
+}
+.lista-compras li:last-child { border-bottom: 0; }
+.lista-compras label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; min-width: 0; }
+.lista-compras input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--orange); flex: none; }
+.lista-compras input:checked + span { text-decoration: line-through; color: var(--ink-3); }
+.lista-qtd { text-align: right; flex: none; max-width: 55%; }
+
+.subtitulo-preparo { margin-top: 18px; }
+.lista-passos { margin: 0; padding-left: 22px; }
+.lista-passos li { margin-bottom: 8px; padding-left: 4px; }
+.lista-passos li::marker { font-weight: 900; color: var(--orange-escuro); }
+.nota { color: var(--ink-3); font-size: .88rem; }
+.nota-rodape { border-top: 1px solid var(--linha); padding-top: 16px; }
+
+/* ------------------------------------------------------------------ erro */
+.pagina-erro { text-align: center; max-width: 34em; margin: 40px auto; }
+.pagina-erro .hero-acoes { justify-content: center; }
+.erro-codigo { font-size: 5rem; font-weight: 900; color: var(--orange); line-height: 1; margin-bottom: 8px; }
+
+/* ----------------------------------------------------------- responsivo */
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: 28px; }
+  .hero-exemplo { transform: none; }
+  .passos { grid-template-columns: 1fr; }
+  .opcoes-unidade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grade-final { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .pagina { padding-top: 24px; }
+  .menu a:not(.menu-cta) { display: none; }
+  .grade-campos { grid-template-columns: 1fr 1fr; }
+  .campo-qtd { grid-column: 1 / -1; }
+  .cartao-pizza { padding: 14px 14px 16px; }
+  .cartao-resultado { padding: 16px 14px 6px; }
+  .acoes-receita { width: 100%; }
+  .acoes-receita .botao { flex: 1 1 auto; }
+  .secao-faixa { padding: 24px 18px; }
+}
+
+@media (max-width: 380px) {
+  .grade-campos { grid-template-columns: 1fr; }
+  .opcoes-unidade { grid-template-columns: 1fr; }
+  .marca { font-size: 1.25rem; }
+  .menu .menu-cta { padding: 8px 12px; font-size: .88rem; }
+  .barra-envio .botao { width: 100%; }
+  .tabela-ingredientes { font-size: .88rem; }
+}
+
+/* ------------------------------------------------------------- impressão */
+/* Regra geral: o conteúdo flui de uma página para a outra; só linhas
+   de tabela, itens de lista e títulos não podem ser cortados ao meio. */
+@media print {
+  @page { size: A4; margin: 12mm 12mm 14mm; }
+
+  html, body { background: #fff !important; }
+  body { display: block; min-height: 0; font-size: 10pt; line-height: 1.4; color: #000; }
+  * { box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .topo, .rodape, .acoes-receita, .pular { display: none !important; }
+  .pagina { padding: 0; max-width: none; }
+  a { color: inherit; text-decoration: none; }
+
+  /* cabeçalho */
+  .cabecalho-receita { display: block; padding-bottom: 6pt; margin-bottom: 10pt; border-bottom: 2pt solid #ff751f; }
+  .cabecalho-receita h1 { font-size: 18pt; margin: 0 0 2pt; }
+  .cabecalho-receita .sobretitulo::before { content: "PizZap · "; }
+  .meta { font-size: 9pt; color: #444; }
+
+  /* blocos em uma coluna, ocupando a largura toda */
+  .grade-pizzas, .grade-final { display: block; }
+  .secao-receita { margin: 0 0 12pt; }
+  .titulo-secao { font-size: 13pt; margin: 0 0 6pt; }
+  h2, h3, caption, .resultado-topo { break-after: avoid; page-break-after: avoid; }
+
+  .cartao-resultado {
+    border: 1pt solid #ccc; border-top: 3pt solid #ff751f; border-radius: 6pt;
+    padding: 8pt 10pt 2pt; margin-bottom: 10pt;
+  }
+  .resultado-topo h3 { font-size: 12pt; }
+  .resultado-topo p { font-size: 9pt; }
+
+  /* tabelas: colunas com largura fixa e linha nunca cortada */
+  .tabela-ingredientes { font-size: 9pt; margin: 6pt 0 8pt; }
+  .tabela-ingredientes th, .tabela-ingredientes td { padding: 3pt 4pt; }
+  .tabela-ingredientes tbody th { width: 40%; }
+  .tabela-ingredientes thead { display: table-header-group; }
+  .tabela-ingredientes tr { break-inside: avoid; page-break-inside: avoid; }
+  .qtd-secundaria { font-size: 8pt; color: #555; }
+
+  /* lista de compras em 2 colunas, sem caixinhas */
+  .lista-compras { border: 1pt solid #ccc; border-radius: 6pt; columns: 2; column-gap: 16pt; padding: 2pt 8pt; }
+  .lista-compras li { break-inside: avoid; padding: 4pt 0; font-size: 9pt; }
+  .lista-compras input { width: 10pt; height: 10pt; margin-top: 1pt; }
+
+  .subtitulo-preparo { font-size: 10.5pt; margin: 8pt 0 3pt; }
+  .lista-passos li { break-inside: avoid; margin-bottom: 2pt; font-size: 9.5pt; }
+  .nota { font-size: 8pt; }
+}
+
+/* ---------- página de teste da API (/api) ---------- */
+.api-pagina { max-width: 880px; }
+.api-intro { color: var(--ink-2); max-width: 70ch; }
+.api-pagina .titulo-secao { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 32px; }
+.api-pagina code { font-family: ui-monospace, Consolas, monospace; font-size: .92em; }
+.api-metodo { font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; color: #fff; }
+.api-metodo.post { background: var(--orange-escuro); }
+.api-metodo.get { background: var(--verde); }
+.api-cartao { background: var(--surface); border: 1px solid var(--linha); border-radius: var(--raio);
+  padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--sombra); }
+.api-cartao p { margin: 0 0 10px; }
+.api-cartao textarea { width: 100%; font: 14px/1.4 ui-monospace, Consolas, monospace; padding: 10px;
+  border: 1px solid var(--linha); border-radius: 8px; background: var(--surface-2); color: var(--ink); resize: vertical; }
+.api-botoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.api-linha { display: flex; gap: 8px; }
+.api-url { flex: 1; min-width: 0; font: 14px ui-monospace, Consolas, monospace; padding: 8px 10px;
+  border: 1px solid var(--linha); border-radius: 8px; background: var(--surface-2); color: var(--ink); }
+.api-desc { color: var(--ink-2); font-size: .92rem; margin: 6px 0 0 !important; }
+.api-resposta { margin: 10px 0 0; padding: 10px 12px; max-height: 360px; overflow: auto; white-space: pre-wrap;
+  word-break: break-word; font: 13px/1.45 ui-monospace, Consolas, monospace; background: var(--surface-2);
+  border-left: 4px solid var(--linha); border-radius: 6px; }
+.api-resposta.ok { border-left-color: var(--verde); }
+.api-resposta.erro { border-left-color: var(--red-texto); }

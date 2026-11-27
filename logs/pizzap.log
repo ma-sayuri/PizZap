@@ -1,0 +1,6 @@
+2026-11-27 09:55:51,067 INFO GET / 200 23.4ms
+2026-11-27 09:55:55,168 WARNING GET /receita/nova 200 252.5ms
+2026-11-27 09:55:59,767 INFO POST /receita/nova 303 37.1ms
+2026-11-27 09:55:59,805 INFO GET /receita/1 200 10.6ms
+2026-11-27 09:55:59,813 INFO 1 receita(s) gravada(s) no MySQL em 44.9 ms (ids 1 a 1)
+2026-11-27 09:56:13,677 INFO GET /api/status 404 0.9ms

@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block titulo %}Gerar receita · PizZap{% endblock %}
+
+{% macro erro_campo(chave) -%}
+  {%- if erros.get(chave) -%}
+    <p class="msg-erro">{{ erros[chave] }}</p>
+  {%- endif -%}
+{%- endmacro %}
+
+{% macro linha_pizza(i, linha, numero) -%}
+{%- set p = 'pizzas[' ~ i ~ ']' -%}
+{%- set marcados = (linha.recheio_ids or [])|map('string')|list -%}
+<fieldset class="cartao-pizza" data-linha>
+  <div class="cartao-topo">
+    <legend><span class="pizza-num">Pizza {{ numero }}</span></legend>
+    <button type="button" class="botao-remover" data-remover aria-label="Remover pizza {{ numero }}">Remover</button>
+  </div>
+
+  <div class="grade-campos">
+    <div class="campo campo-qtd{% if erros.get(p ~ '.quantidade') %} campo-invalido{% endif %}">
+      <label for="qtd-{{ i }}">Quantidade</label>
+      <input id="qtd-{{ i }}" name="pizzas[{{ i }}][quantidade]" type="number" inputmode="numeric"
+             min="1" max="50" step="1" required value="{{ linha.quantidade }}" data-qtd>
+      {{ erro_campo(p ~ '.quantidade') }}
+    </div>
+
+    <div class="campo{% if erros.get(p ~ '.diametro_cm') %} campo-invalido{% endif %}">
+      <label for="tam-{{ i }}">Tamanho</label>
+      <select id="tam-{{ i }}" name="pizzas[{{ i }}][diametro_cm]" required>
+        {% for t in opcoes.tamanhos %}
+          <option value="{{ t.diametro_cm }}"{% if linha.diametro_cm|string == t.diametro_cm|string %} selected{% endif %}>{{ t.nome }} · {{ t.diametro_cm }} cm</option>
+        {% endfor %}
+      </select>
+      {{ erro_campo(p ~ '.diametro_cm') }}
+    </div>
+
+    <div class="campo{% if erros.get(p ~ '.tipo_massa_id') %} campo-invalido{% endif %}">
+      <label for="massa-{{ i }}">Massa</label>
+      <select id="massa-{{ i }}" name="pizzas[{{ i }}][tipo_massa_id]" required>
+        {% for m in opcoes.massas %}
+          <option value="{{ m.id }}" title="{{ m.descricao }}"{% if linha.tipo_massa_id|string == m.id|string %} selected{% endif %}>{{ m.nome }}</option>
+        {% endfor %}
+      </select>
+      {{ erro_campo(p ~ '.tipo_massa_id') }}
+    </div>
+  </div>
+
+  <div class="campo campo-sabores{% if erros.get(p ~ '.recheio_ids') %} campo-invalido{% endif %}" data-sabores>
+    <p class="rotulo" id="sabores-rotulo-{{ i }}">Sabores <small>até {{ opcoes.limites.sabores_por_pizza }} · com mais de um, a pizza é dividida em partes iguais</small></p>
+    {% for grupo, doce in [('Salgadas', false), ('Doces', true)] %}
+      <div class="grupo-sabores" role="group" aria-labelledby="sabores-rotulo-{{ i }}">
+        <span class="grupo-nome">{{ grupo }}</span>
+        <div class="chips">
+          {% for r in opcoes.recheios if r.doce == doce %}
+            <label class="chip" title="{{ r.descricao }}">
+              <input type="checkbox" name="pizzas[{{ i }}][recheio_ids]" value="{{ r.id }}"{% if r.id|string in marcados %} checked{% endif %}>
+              <span>{{ r.nome }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+    {{ erro_campo(p ~ '.recheio_ids') }}
+  </div>
+</fieldset>
+{%- endmacro %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+  <p class="sobretitulo">Nova receita</p>
+  <h1>Monte a sua fornada</h1>
+  <p>Adicione uma linha para cada tipo de pizza. Pizzas iguais entram na mesma linha, mudando só a quantidade.</p>
+</div>
+
+{% if erros %}
+  <div class="alerta-erro" role="alert" tabindex="-1" id="resumo-erros">
+    <h2>Confira {{ 'o campo' if erros|length == 1 else 'os ' ~ erros|length ~ ' campos' }} abaixo</h2>
+    <ul>
+      {% for chave, msg in erros.items() %}
+        <li>{% if chave.startswith('pizzas[') %}Pizza {{ (chave[7:chave.index(']')]|int) + 1 }}: {% endif %}{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+<form class="formulario" method="post" action="{{ url_for('nova_receita') }}" novalidate data-form-receita
+      data-max-linhas="{{ opcoes.limites.tipos_de_pizza }}" data-max-sabores="{{ opcoes.limites.sabores_por_pizza }}">
+
+  <section class="bloco">
+    <h2 class="bloco-titulo"><span class="bloco-num">1</span> Pizzas</h2>
+    {% if erros.get('pizzas') %}<p class="msg-erro">{{ erros['pizzas'] }}</p>{% endif %}
+    <div class="lista-pizzas" data-lista>
+      {% for linha in linhas %}
+        {{ linha_pizza(loop.index0, linha, loop.index) }}
+      {% endfor %}
+    </div>
+    <button type="button" class="botao botao-secundario" data-adicionar>+ Adicionar outro tipo de pizza</button>
+  </section>
+
+  <section class="bloco">
+    <h2 class="bloco-titulo"><span class="bloco-num">2</span> Unidade de medida</h2>
+    <div class="opcoes-unidade{% if erros.get('unidade') %} campo-invalido{% endif %}" role="radiogroup" aria-label="Unidade de medida">
+      {% for u in opcoes.unidades %}
+        <label class="opcao-unidade">
+          <input type="radio" name="unidade" value="{{ u.id }}" required{% if unidade == u.id %} checked{% endif %}>
+          <span>{{ u.nome }}</span>
+        </label>
+      {% endfor %}
+    </div>
+    {{ erro_campo('unidade') }}
+  </section>
+
+  <div class="barra-envio">
+    <p class="total-pizzas" aria-live="polite">Total: <b data-total>–</b> <span data-total-rotulo>pizza(s)</span></p>
+    <button type="submit" class="botao botao-principal">Gerar receita</button>
+  </div>
+</form>
+
+<template id="modelo-pizza">
+  {{ linha_pizza('__i__', {'quantidade': 1, 'diametro_cm': 35, 'tipo_massa_id': opcoes.massas[0].id if opcoes.massas else '', 'recheio_ids': []}, '__n__') }}
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+{% endblock %}

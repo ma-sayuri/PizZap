@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block titulo %}PizZap · Receitas de pizza na medida certa{% endblock %}
+{% block classe_body %}pagina-home{% endblock %}
+
+{% block conteudo %}
+<section class="hero">
+  <div class="hero-texto">
+    <p class="sobretitulo">Receitas de pizza sem conta de cabeça</p>
+    <h1>A quantidade certa de cada ingrediente, para qualquer pizza.</h1>
+    <p class="hero-lead">
+      Diga quantas pizzas vai fazer, o tamanho, o tipo de massa e os sabores.
+      O PizZap calcula a farinha, a água, o fermento e o recheio de cada uma,
+      em gramas ou em xícaras e colheres, e ainda monta a lista de compras.
+    </p>
+    <div class="hero-acoes">
+      <a class="botao botao-texto" href="#como-funciona">Como funciona</a>
+    </div>
+  </div>
+
+  <aside class="hero-exemplo" aria-label="Exemplo de resultado">
+    <p class="exemplo-rotulo">Exemplo · 1 pizza Grande (35 cm), massa Tradicional</p>
+    <ul class="exemplo-lista">
+      <li><span>Farinha de trigo</span><b>206 g</b><small>2 xícaras</small></li>
+      <li><span>Água</span><b>124 g</b><small>½ xícara + 2 ½ colheres de sopa</small></li>
+      <li><span>Fermento seco</span><b>2,1 g</b><small>≈ ⅜ colher de chá</small></li>
+      <li><span>Mussarela ralada</span><b>192 g</b><small>só em gramas</small></li>
+    </ul>
+  </aside>
+</section>
+
+<section id="como-funciona" class="secao">
+  <h2>Como funciona</h2>
+  <ol class="passos">
+    <li>
+      <span class="passo-num">1</span>
+      <h3>Escolha as pizzas</h3>
+      <p>Quantidade, tamanho (de 25 a 40 cm), tipo de massa e até 4 sabores por pizza.</p>
+    </li>
+    <li>
+      <span class="passo-num">2</span>
+      <h3>Escolha a medida</h3>
+      <p>Gramas, quilos ou medidas caseiras. Também dá para ver gramas e xícaras lado a lado.</p>
+    </li>
+    <li>
+      <span class="passo-num">3</span>
+      <h3>Receba a receita</h3>
+      <p>Ingredientes por pizza, total da fornada, lista de compras e modo de preparo. Imprima ou salve em PDF.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="secao secao-faixa">
+  <h2>Por que usar</h2>
+  <ul class="beneficios">
+    <li><b>Menos desperdício.</b> Você compra e usa só o que a fornada precisa.</li>
+    <li><b>Mesma pizza sempre.</b> As proporções da massa se mantêm em qualquer tamanho.</li>
+    <li><b>Sem cadastro.</b> O PizZap não pede nem guarda nenhum dado pessoal.</li>
+  </ul>
+  <a class="botao botao-principal" href="{{ url_for('nova_receita') }}">Começar agora</a>
+</section>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block titulo %}API · PizZap{% endblock %}
+{% block conteudo %}
+<section class="api-pagina">
+  <p class="sobretitulo">Área da equipe</p>
+  <h1>API do PizZap</h1>
+  <p class="api-intro">Página só da equipe (acesso com a chave do <code>config.py</code>). Clique em <b>Enviar</b> e a
+    resposta aparece logo abaixo do botão, com o código HTTP: 200 ou 201 = deu certo, 400 = dados inválidos,
+    404 = não encontrado, 409 = já existe. <a href="{{ url_for('sair_da_api') }}">Sair</a></p>
+
+  <h2 class="titulo-secao">1. Cadastrar no banco <span class="api-metodo post">POST</span></h2>
+
+  <div class="api-cartao">
+    <p><b>Novo ingrediente</b> <code>/api/banco/ingredientes</code> (tabela Ingredientes).
+      <code>densidade</code> em g/ml é opcional: com <code>null</code>, o ingrediente aparece só em gramas.</p>
+    <textarea id="corpo-ingrediente" rows="4" spellcheck="false" aria-label="JSON do ingrediente">{
+  "ingrediente": "Atum em lata",
+  "densidade": null
+}</textarea>
+    <div class="api-botoes">
+      <button class="botao botao-principal" data-metodo="POST" data-url="/api/banco/ingredientes" data-corpo="corpo-ingrediente">Enviar</button>
+      <button class="botao botao-texto" type="button" data-exemplo-erro="corpo-ingrediente"
+        data-json='{&#10;  "ingrediente": "",&#10;  "densidade": -1&#10;}'>Ver um exemplo com erro (400)</button>
+    </div>
+    <pre class="api-resposta" hidden></pre>
+  </div>
+
+  <div class="api-cartao">
+    <p><b>Nova medida caseira</b> <code>/api/banco/medidas</code> (tabela MedidasCaseiras).
+      <code>volume</code> em ml. A medida nova já passa a ser usada na conversão das receitas.</p>
+    <textarea id="corpo-medida" rows="4" spellcheck="false" aria-label="JSON da medida caseira">{
+  "medida_caseira": "colher de sobremesa",
+  "volume": 7.5
+}</textarea>
+    <div class="api-botoes">
+      <button class="botao botao-principal" data-metodo="POST" data-url="/api/banco/medidas" data-corpo="corpo-medida">Enviar</button>
+      <button class="botao botao-texto" type="button" data-exemplo-erro="corpo-medida"
+        data-json='{&#10;  "medida_caseira": "copo",&#10;  "volume": 0&#10;}'>Ver um exemplo com erro (400)</button>
+    </div>
+    <pre class="api-resposta" hidden></pre>
+  </div>
+  <div class="api-cartao">
+    <p><b>Novo sabor</b> <code>/api/banco/recheios</code> (tabelas Recheios e RecheiosXIngredientes).
+      Cada ingrediente vai com o <code>id</code> (veja em <code>/api/banco/ingredientes</code>, inclusive os que
+      você cadastrou acima) e os gramas por cm² de pizza. Referência: molho 0.08, mussarela 0.1 a 0.2,
+      orégano 0.002. O sabor já aparece no formulário.</p>
+    <textarea id="corpo-recheio" rows="11" spellcheck="false" aria-label="JSON do sabor">{
+  "recheio": "Atum",
+  "descricao": "Molho de tomate, atum, cebola e mussarela.",
+  "doce": false,
+  "ingredientes": [
+    {"id_ingrediente": 9,  "gramas_por_cm2": 0.08},
+    {"id_ingrediente": 12, "gramas_por_cm2": 0.12},
+    {"id_ingrediente": 17, "gramas_por_cm2": 0.04}
+  ]
+}</textarea>
+    <div class="api-botoes">
+      <button class="botao botao-principal" data-metodo="POST" data-url="/api/banco/recheios" data-corpo="corpo-recheio">Enviar</button>
+      <button class="botao botao-texto" type="button" data-exemplo-erro="corpo-recheio"
+        data-json='{&#10;  "recheio": "Teste",&#10;  "descricao": "Sabor com ingrediente inexistente.",&#10;  "ingredientes": [{"id_ingrediente": 99999, "gramas_por_cm2": 0}]&#10;}'>Ver um exemplo com erro (400)</button>
+    </div>
+    <pre class="api-resposta" hidden></pre>
+  </div>
+  <p class="nota">Para corrigir ou apagar um cadastro, use o MySQL Workbench e reinicie o servidor.</p>
+
+  <h2 class="titulo-secao">2. Consultar <span class="api-metodo get">GET</span></h2>
+  {% set rotas = [
+    ("/api/receitas/1", "Receita gerada nº 1, completa (troque o número no fim do endereço)"),
+    ("/api/opcoes", "Tamanhos, massas, sabores e limites do formulário"),
+    ("/api/status", "Saúde do sistema: tempo de resposta, banco e gravações"),
+    ("/api/banco/medidas", "Tabela MedidasCaseiras"),
+    ("/api/banco/ingredientes", "Tabela Ingredientes, com a densidade"),
+    ("/api/banco/templates", "Tabela TemplatesReceitas (modo de preparo)"),
+    ("/api/banco/recheios", "Sabores com os ingredientes (Recheios e RecheiosXIngredientes)"),
+    ("/api/banco/receitas", "Últimas receitas gravadas em Receitas_Geradas"),
+    ("/api/banco/receitas/1", "Receita gravada nº 1: parâmetros e ingredientes usados"),
+  ] %}
+  {% for url, texto in rotas %}
+  <div class="api-cartao">
+    <div class="api-linha">
+      <input class="api-url" value="{{ url }}" aria-label="Endereço">
+      <button class="botao botao-secundario" data-metodo="GET">Enviar</button>
+    </div>
+    <p class="api-desc">{{ texto }}</p>
+    <pre class="api-resposta" hidden></pre>
+  </div>
+  {% endfor %}
+  <p class="nota">Os endereços com <code>GET</code> também abrem direto no navegador, ex.:
+    <a href="/api/banco/ingredientes">/api/banco/ingredientes</a>.</p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  async function enviar(botao) {
+    const cartao = botao.closest('.api-cartao');
+    const saida = cartao.querySelector('.api-resposta');
+    const metodo = botao.dataset.metodo;
+    const url = botao.dataset.url || cartao.querySelector('.api-url').value.trim();
+    const opcoes = { method: metodo };
+    if (metodo === 'POST') {
+      opcoes.headers = { 'Content-Type': 'application/json' };
+      opcoes.body = document.getElementById(botao.dataset.corpo).value;
+    }
+    saida.hidden = false;
+    saida.textContent = 'Enviando...';
+    try {
+      const inicio = performance.now();
+      const resposta = await fetch(url, opcoes);
+      const ms = Math.round(performance.now() - inicio);
+      const texto = await resposta.text();
+      let corpo = texto;
+      try { corpo = JSON.stringify(JSON.parse(texto), null, 2); } catch (e) { /* não é JSON */ }
+      saida.className = 'api-resposta ' + (resposta.ok ? 'ok' : 'erro');
+      saida.textContent = metodo + ' ' + url + '  →  ' + resposta.status + ' ' + resposta.statusText +
+                          ' (' + ms + ' ms)\n\n' + corpo;
+    } catch (e) {
+      saida.className = 'api-resposta erro';
+      saida.textContent = 'Não consegui falar com o servidor: ' + e;
+    }
+  }
+  document.querySelectorAll('button[data-metodo]').forEach(function (b) {
+    b.addEventListener('click', function () { enviar(b); });
+  });
+  document.querySelectorAll('[data-exemplo-erro]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.getElementById(b.dataset.exemploErro).value = b.dataset.json;
+    });
+  });
+</script>
+{% endblock %}

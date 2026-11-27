@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }} · PizZap{% endblock %}
+
+{% block conteudo %}
+<section class="pagina-erro">
+  <p class="erro-codigo">{{ codigo }}</p>
+  <h1>{{ titulo }}</h1>
+  <p>{{ texto }}</p>
+  <div class="hero-acoes">
+    {% if codigo in (429, 500, 503) %}
+      <a class="botao botao-principal" href="{{ request.path }}">Tentar novamente</a>
+      <a class="botao botao-texto" href="{{ url_for('index') }}">Ir para o início</a>
+    {% else %}
+      <a class="botao botao-principal" href="{{ url_for('nova_receita') }}">Gerar uma receita</a>
+      <a class="botao botao-texto" href="{{ url_for('index') }}">Ir para o início</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

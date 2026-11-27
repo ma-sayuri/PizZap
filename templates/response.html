@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block titulo %}Receita #{{ receita.id }} · PizZap{% endblock %}
+
+{% macro quantidade(m) -%}
+  {%- set aprox = '<abbr title="Valor aproximado: a medida caseira mais próxima tem diferença acima de 5%">≈</abbr> ' -%}
+  <span class="qtd-principal">{% if m.aproximado and not m.caseira %}{{ aprox|safe }}{% endif %}{{ m.texto }}</span>
+  {%- if m.caseira %}
+    <span class="qtd-secundaria">{% if m.aproximado %}{{ aprox|safe }}{% endif %}{{ m.caseira }}</span>
+  {%- endif %}
+{%- endmacro %}
+
+{% macro tabela(titulo, linhas, qtd) -%}
+  {% if linhas %}
+  <table class="tabela-ingredientes">
+    <caption>{{ titulo }}</caption>
+    <thead>
+      <tr>
+        <th scope="col">Ingrediente</th>
+        <th scope="col">Por pizza</th>
+        {% if qtd > 1 %}<th scope="col">Total ({{ qtd }})</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in linhas %}
+      <tr>
+        <th scope="row">{{ l.ingrediente }}</th>
+        <td>{{ quantidade(l.por_pizza) }}</td>
+        {% if qtd > 1 %}<td>{{ quantidade(l.total) }}</td>{% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{%- endmacro %}
+
+{% set nomes_unidade = {'gramas': 'gramas', 'quilogramas': 'quilogramas', 'caseira': 'medidas caseiras', 'ambas': 'gramas e medidas caseiras'} %}
+
+{% block conteudo %}
+<div class="cabecalho-receita">
+  <div>
+    <p class="sobretitulo">Receita #{{ receita.id }}</p>
+    <h1>{{ receita.resumo.total_pizzas }} pizza{{ 's' if receita.resumo.total_pizzas > 1 }} na medida certa</h1>
+    <p class="meta">
+      Gerada em {{ receita.criado_em|data }} · em {{ nomes_unidade.get(receita.unidade, receita.unidade) }}
+      · {{ '%.1f'|format(receita.resumo.massa_total_g / 1000) | replace('.', ',') }} kg de massa no total
+    </p>
+    {% if receita.reconstruida %}
+    <p class="aviso-reconstruida">Receita remontada a partir dos parâmetros gravados no banco
+      (quantidade, tamanho, massa e sabores).</p>
+    {% endif %}
+  </div>
+  <div class="acoes-receita">
+    <button type="button" class="botao botao-principal" data-imprimir>Imprimir</button>
+    <button type="button" class="botao botao-secundario" data-imprimir title="Na janela de impressão, escolha “Salvar como PDF”">Salvar como PDF</button>
+    <a class="botao botao-texto" href="{{ url_for('nova_receita') }}">Nova receita</a>
+  </div>
+</div>
+
+<section class="secao-receita" aria-labelledby="titulo-pizzas">
+  <h2 id="titulo-pizzas" class="titulo-secao">Ingredientes por pizza</h2>
+  <div class="grade-pizzas">
+    {% for p in receita.pizzas %}
+    <article class="cartao-resultado">
+      <header class="resultado-topo">
+        <h3>{{ p.quantidade }} × {{ p.tamanho }} <span>({{ p.diametro_cm }} cm)</span></h3>
+        <p>Massa {{ p.tipo_massa }} · {{ p.recheios|join(' + ') }}{% if p.recheios|length > 1 %} <span class="selo">{{ 'meio a meio' if p.recheios|length == 2 else 'dividida em ' ~ p.recheios|length }}</span>{% endif %}</p>
+        <p class="bolinha">Bolinha de massa: <b>{{ p.peso_massa_g }} g</b> por pizza</p>
+      </header>
+      {{ tabela('Massa', p.massa, p.quantidade) }}
+      {{ tabela('Cobertura', p.cobertura, p.quantidade) }}
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="grade-final">
+  <section class="secao-receita" aria-labelledby="titulo-compras">
+    <h2 id="titulo-compras" class="titulo-secao">Lista de compras</h2>
+    <p class="nota">Total de todas as pizzas somadas.</p>
+    <ul class="lista-compras">
+      {% for l in receita.lista_de_compras %}
+      <li>
+        <label><input type="checkbox"> <span>{{ l.ingrediente }}</span></label>
+        <span class="lista-qtd">{{ quantidade(l.total) }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="secao-receita" aria-labelledby="titulo-preparo">
+    <h2 id="titulo-preparo" class="titulo-secao">Modo de preparo</h2>
+    {% for m in receita.modo_de_preparo %}
+      <h3 class="subtitulo-preparo">Massa {{ m.tipo_massa }}</h3>
+      <ol class="lista-passos">
+        {% for passo in m.passos %}<li>{{ passo }}</li>{% endfor %}
+      </ol>
+    {% endfor %}
+    <h3 class="subtitulo-preparo">Montagem e forno</h3>
+    <ol class="lista-passos">
+      {% for passo in receita.montagem %}<li>{{ passo }}</li>{% endfor %}
+    </ol>
+  </section>
+</div>
+
+<p class="nota nota-rodape">
+  Ingredientes como calabresa, tomate em rodelas e frutas não têm medida caseira confiável, por isso aparecem sempre em gramas.
+  O sinal ≈ indica que a medida caseira tem diferença acima de 5% em relação ao peso exato.
+</p>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+{% endblock %}
